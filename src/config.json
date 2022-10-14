@@ -1,0 +1,5 @@
+{
+    "API_SERVER": "http://localhost:8000/api",
+    "_comment": "SERVER_PROD https://api.pgs.ognowski.it/v1"
+
+}
