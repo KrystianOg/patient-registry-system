@@ -1,14 +1,14 @@
 import { Container, CssBaseline } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
-import { Navbar, Sidebar, Footer, RequireAuth } from "./components";
-import { useWindowSize } from "usehooks-ts";
+import { Navbar, Footer, RequireAuth } from "./components";
 import {
 	Home,
 	SignIn,
 	SignUp,
+	RestorePassword,
 	Unauthorized,
 	Account,
-	Callendar,
+	Calendar,
 	Appointments,
 	Requests,
 	Request,
@@ -17,10 +17,10 @@ import {
 } from "./pages";
 
 const App = () => {
-	const { width } = useWindowSize();
 	return (
 		<>
-			{width > 1024 && <Navbar />}
+			<Navbar />
+
 			<CssBaseline />
 			<Container>
 				<Routes>
@@ -29,12 +29,13 @@ const App = () => {
 						<Route index element={<Home />} />
 						<Route path="signin" element={<SignIn />} />
 						<Route path="signup" element={<SignUp />} />
+						<Route path="restore" element={<RestorePassword />} />
 						<Route path="Unauthorized" element={<Unauthorized />} />
 
 						{/* private routes */}
 						<Route element={<RequireAuth roles={[]} />}>
 							<Route path="account" element={<Account />} />
-							<Route path="callendar" element={<Callendar />} />
+							<Route path="calendar" element={<Calendar />} />
 							<Route path="appointments" element={<Appointments />} />
 							<Route path="requests">
 								<Route index element={<Requests />} />
