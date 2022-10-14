@@ -5,10 +5,10 @@ import {
 	Home,
 	SignIn,
 	SignUp,
-	RestorePassword,
+	//RestorePassword,
 	Unauthorized,
 	Account,
-	Calendar,
+	//Calendar,
 	Appointments,
 	Requests,
 	Request,
@@ -29,13 +29,13 @@ const App = () => {
 						<Route index element={<Home />} />
 						<Route path="signin" element={<SignIn />} />
 						<Route path="signup" element={<SignUp />} />
-						<Route path="restore" element={<RestorePassword />} />
+						{/* <Route path="restore" element={<RestorePassword />} /> */}
 						<Route path="Unauthorized" element={<Unauthorized />} />
 
 						{/* private routes */}
 						<Route element={<RequireAuth roles={[]} />}>
 							<Route path="account" element={<Account />} />
-							<Route path="calendar" element={<Calendar />} />
+							{/* <Route path="calendar" element={<Calendar />} /> */}
 							<Route path="appointments" element={<Appointments />} />
 							<Route path="requests">
 								<Route index element={<Requests />} />

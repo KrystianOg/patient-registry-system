@@ -1,6 +1,13 @@
+enum UserType {
+    ADMIN = 1,
+    MODERATOR = 2,
+    DOCTOR = 3,
+    PATIENT = 4
+}
+
 interface IUser {
     id: string;
-    type: number | string; // TODO: check that, or enum
+    type: UserType; 
     first_name: string;
     last_name: string;
     email: string;
@@ -8,5 +15,6 @@ interface IUser {
 }
 
 export type {
-    IUser
+    IUser,
+    UserType
 }
