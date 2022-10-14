@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ColorModeContext } from '../contexts/ThemeProvider';
 
-const useTheme = () => useContext(ColorModeContext);
+const useColorMode = () => useContext(ColorModeContext);
 
-export default useTheme
+export default useColorMode
