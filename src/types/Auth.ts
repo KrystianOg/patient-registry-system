@@ -1,7 +1,7 @@
 import { IUser } from './User'
 
 interface IAuthContext {
-    user: IUser;
+    user?: IUser;
     accessToken: string;
     refreshToken: string;
 }

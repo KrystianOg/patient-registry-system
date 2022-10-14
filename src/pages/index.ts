@@ -1,9 +1,10 @@
 import Home from './Home';
-import SignIn from './SignIn';
-import SignUp from './SignUp'
+import SignIn from './Auth/SignIn';
+import SignUp from './Auth/SignUp'
+import RestorePassword from './Auth/RestorePassword';
 import Unauthorized from './Unauthorized';
 import Appointments from './Appointments'
-import Callendar from './Callendar'
+import Calendar from './Calendar'
 import Account from './Account'
 import Requests from './Requests'
 import Request from './Requests'
@@ -14,10 +15,11 @@ export {
     Home,
     SignIn,
     SignUp,
+    RestorePassword,
     Unauthorized,
     Account,
     Appointments,
-    Callendar,
+    Calendar,
     Requests,
     Request,
     AddRequest,

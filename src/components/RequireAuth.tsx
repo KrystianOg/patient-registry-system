@@ -12,7 +12,7 @@ const RequireAuth = ({ roles }: IProps) => {
 	//change to this
 	// auth?roles?.find(role=>allowedRoles?.includes(role))
 
-	return auth?.refreshToken ? (
+	return auth?.user ? (
 		<Outlet />
 	) : (
 		<Navigate to="/signin" state={{ from: location }} replace />
