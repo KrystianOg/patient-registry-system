@@ -51,7 +51,6 @@ export default function SignIn() {
 			})
 			.then((response) => {
 				if (response.status === 200) {
-					// TODO: switch between session and localstorage
 					setAuth({
 						...auth,
 						user: jwt(response.data.access),
