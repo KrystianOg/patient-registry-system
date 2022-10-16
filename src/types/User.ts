@@ -5,16 +5,16 @@ enum UserType {
     PATIENT = 4
 }
 
-interface IUser {
+interface User {
     id: string;
     type: UserType; 
-    first_name: string;
-    last_name: string;
+    first_name?: string;
+    last_name?: string;
     email: string;
     username: string;
 }
 
 export type {
-    IUser,
+    User,
     UserType
 }

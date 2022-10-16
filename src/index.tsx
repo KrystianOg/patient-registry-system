@@ -8,6 +8,8 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import AuthProvider from "./contexts/AuthProvider";
 import ThemeProvider from "./contexts/ThemeProvider";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "./app/store";
 
 if (process.env.NODE_ENV === "production") {
 	disableReactDevTools();
@@ -19,16 +21,18 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<React.StrictMode>
-		<AuthProvider>
-			<HelmetProvider>
-				<ThemeProvider>
-					<SnackbarProvider>
-						<BrowserRouter>
-							<App />
-						</BrowserRouter>
-					</SnackbarProvider>
-				</ThemeProvider>
-			</HelmetProvider>
-		</AuthProvider>
+		<ReduxProvider store={store}>
+			<AuthProvider>
+				<HelmetProvider>
+					<ThemeProvider>
+						<SnackbarProvider>
+							<BrowserRouter>
+								<App />
+							</BrowserRouter>
+						</SnackbarProvider>
+					</ThemeProvider>
+				</HelmetProvider>
+			</AuthProvider>
+		</ReduxProvider>
 	</React.StrictMode>
 );

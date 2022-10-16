@@ -5,18 +5,11 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { LockOutlined } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-import { StyledContainer } from "./StyledComponents";
+import { StyledContainer, StyledTextLink } from "./StyledComponents";
 import { axiosPublic as axios } from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
-import { StyledTextLink } from "./StyledComponents";
 import { QuickHelmet } from "../../components";
 import { useForm } from "react-hook-form";
-
-type SignUpData = {
-	email: string;
-	password: string;
-	password2: string;
-};
 
 export default function SignUp() {
 	const navigate = useNavigate();
@@ -27,7 +20,7 @@ export default function SignUp() {
 		watch,
 	} = useForm();
 
-	// when forms are valid
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const onSubmit = async (data: any) => {
 		await axios
 			.post("/auth/signup/", data)
@@ -83,7 +76,7 @@ export default function SignUp() {
 							required: "Email is required",
 							pattern: {
 								value:
-									/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+									/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 								message: "Invalid email",
 							},
 						})}

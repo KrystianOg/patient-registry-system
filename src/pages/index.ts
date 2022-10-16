@@ -1,27 +1,14 @@
-import Home from './Home';
-import SignIn from './Auth/SignIn';
-import SignUp from './Auth/SignUp'
-import RestorePassword from './Auth/RestorePassword';
-import Unauthorized from './Unauthorized';
-import Appointments from './Appointments'
-import Calendar from './Calendar'
-import Account from './Account'
-import Requests from './Requests'
-import Request from './Requests'
-import AddRequest from './Requests'
-import NotFound from './NotFound';
+import { lazy } from 'react'
 
-export {
-    Home,
-    SignIn,
-    SignUp,
-    RestorePassword,
-    Unauthorized,
-    Account,
-    Appointments,
-    Calendar,
-    Requests,
-    Request,
-    AddRequest,
-    NotFound
-}
+export const Home = lazy(() => import ('./Home'))
+export const SignIn = lazy(() => import ('./Auth/SignIn'))
+export const SignUp = lazy(() => import ('./Auth/SignUp'))
+export const RestorePassword = lazy(() => import ('./Auth/RestorePassword'))
+export const Unauthorized = lazy(() => import ('./Unauthorized'))
+export const NotFound = lazy(() => import ('./NotFound'))
+export const Appointments = lazy(() => import ('./Appointments'))
+export const Calendar = lazy(() => import ('./Calendar'))
+export const Account = lazy(() => import ('./Account'))
+export const Requests = lazy(() => import ('./Requests'))
+export const Request = lazy(() => import ('./Requests/Request'))
+export const AddRequest = lazy(() => import ('./Requests/AddRequest'))

@@ -3,19 +3,22 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { StyledTextLink } from "./StyledComponents";
+import { StyledTextLink, StyledContainer } from "./StyledComponents";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { LockOutlined } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-import { StyledContainer } from "./StyledComponents";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { axiosPublic as axios } from "../../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
 import { QuickHelmet } from "../../components";
 import jwt from "jwt-decode";
 import { Stack } from "@mui/material";
+import { useDebounce } from "usehooks-ts";
+import { selectIsAuthenticated } from "../../features/auth/authSlice";
+import { useSigninMutation } from "../../app/services/auth";
+import { useAppSelector } from "../../hooks/useStore";
 
 type SignInData = {
 	email: string;
@@ -24,6 +27,9 @@ type SignInData = {
 };
 
 export default function SignIn() {
+	const [signin, { isLoading }] = useSigninMutation();
+	const isAuthenticated = useAppSelector(selectIsAuthenticated);
+
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { auth, setAuth } = useAuth();
@@ -34,6 +40,7 @@ export default function SignIn() {
 		password: "",
 		rememberMe: false,
 	});
+	const debouncedValue = useDebounce<SignInData>(formData, 700);
 
 	const [error, setError] = useState<boolean>(false);
 
@@ -41,32 +48,17 @@ export default function SignIn() {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const loginUser = async (e: any) => {
-		e.preventDefault();
+	useEffect(() => {
+		console.log("debounced");
+		loginUser();
+	}, [debouncedValue]);
 
-		await axios
-			.post("/auth/token/", {
-				email: formData.email,
-				password: formData.password,
-			})
-			.then((response) => {
-				if (response.status === 200) {
-					setAuth({
-						...auth,
-						user: jwt(response.data.access),
-						accessToken: response.data.access,
-						refreshToken: response.data.refresh,
-					});
-
-					navigate(from, { replace: true });
-				} else {
-					setError(true);
-				}
-			})
-			.catch((error) => {
-				if (error.response.status === 401) {
-					setError(true);
-				}
+	const loginUser = async (e?: any) => {
+		e?.preventDefault();
+		signin(formData)
+			.unwrap()
+			.then((fulfilled) => {
+				navigate("/");
 			});
 	};
 

@@ -1,7 +1,7 @@
 import { styled, Container } from '@mui/material';
 import { Link } from 'react-router-dom'
 
-const StyledContainer = styled(Container)(({ theme }) =>({
+const StyledContainer = styled(Container)(() =>({
     height: "70vh",
     display: "flex",
     justifyContent: "center",
