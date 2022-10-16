@@ -8,17 +8,15 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { LockOutlined } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
-import { axiosPublic as axios } from "../../utils/axios";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
 import { QuickHelmet } from "../../components";
-import jwt from "jwt-decode";
 import { Stack } from "@mui/material";
-import { useDebounce } from "usehooks-ts";
 import { selectIsAuthenticated } from "../../features/auth/authSlice";
 import { useSigninMutation } from "../../app/services/auth";
 import { useAppSelector } from "../../hooks/useStore";
+import GoogleLogin from "./GoogleLogin";
 
 type SignInData = {
 	email: string;
@@ -27,12 +25,11 @@ type SignInData = {
 };
 
 export default function SignIn() {
-	const [signin, { isLoading }] = useSigninMutation();
+	const [signin] = useSigninMutation();
 	const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { auth, setAuth } = useAuth();
 	const from = location.state?.from?.pathname || "/";
 
 	const [formData, setFormData] = useState<SignInData>({
@@ -40,7 +37,6 @@ export default function SignIn() {
 		password: "",
 		rememberMe: false,
 	});
-	const debouncedValue = useDebounce<SignInData>(formData, 700);
 
 	const [error, setError] = useState<boolean>(false);
 
@@ -48,18 +44,11 @@ export default function SignIn() {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	useEffect(() => {
-		console.log("debounced");
-		loginUser();
-	}, [debouncedValue]);
-
 	const loginUser = async (e?: any) => {
 		e?.preventDefault();
 		signin(formData)
 			.unwrap()
-			.then((fulfilled) => {
-				navigate("/");
-			});
+			.then(() => navigate("/", { replace: true, state: { from } }));
 	};
 
 	return (
@@ -145,6 +134,7 @@ export default function SignIn() {
 							</StyledTextLink>
 						</Grid>
 					</Grid>
+					<GoogleLogin />
 				</Box>
 			</Box>
 		</StyledContainer>

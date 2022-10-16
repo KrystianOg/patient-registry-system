@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { NavigationOutlet, RequireAuth, Loading } from "./components";
 import {
@@ -16,6 +16,8 @@ import {
 	AddRequest,
 	NotFound,
 } from "./pages";
+import { gapi } from "gapi-script";
+import config from "./config.json";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.background.default,
@@ -24,6 +26,18 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 const App = () => {
+	//add gapi
+
+	useEffect(() => {
+		const initClient = () => {
+			gapi.client.init({
+				clientId: config.google_clientId,
+				scope: "",
+			});
+			gapi.load("client:auth2", initClient);
+		};
+	});
+
 	return (
 		<StyledContainer>
 			<Suspense fallback={<Loading />}>

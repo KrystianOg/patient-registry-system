@@ -27,14 +27,26 @@ export const authApi = api.injectEndpoints({
                 method: 'POST',
                 body: credentials
             }),
+        }),
+        signinWithGoogle: build.mutation<{idtoken: string}, Partial<string>>({
+            query: (idToken: string) => ({
+                url: '/auth/google/signin/',
+                method: 'GET',
+                headers: {
+                    Authorization: idToken,
+                    'Content-Type': 'application/json'
+                }
+            })
         })
+
     })
 })
 
 export const {
     useSigninMutation,
+    useSigninWithGoogleMutation
 } = authApi
 
 export const {
-    endpoints: { signin }
+    endpoints: { signin, signinWithGoogle }
 } = authApi
