@@ -10,7 +10,6 @@ import { LockOutlined } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks";
 import { QuickHelmet } from "../../components";
 import { Stack } from "@mui/material";
 import { selectIsAuthenticated } from "../../features/auth/authSlice";
