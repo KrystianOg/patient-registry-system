@@ -1,25 +1,12 @@
 import { User } from './User';
 import { Auth, Token } from './Auth';
-
-interface IAppointment {
-    doctor: User;
-    patient: User;
-    date: string;
-    duration: string;
-    pateint_appeared: boolean;
-    comment: string;
-}
-
-interface IRequest {
-    id: string;
-    user: User;
-    symptoms: string[];
-    comment: string;
-
-}
+import { Request } from './Request'
+import { Appointment } from './Appointment'
 
 export type {
     User,
     Auth,
-    Token
+    Token,
+    Request,
+    Appointment
 }

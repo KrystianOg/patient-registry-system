@@ -23,5 +23,6 @@ module.exports = {
                 "message": "Use typed hooks `useAppDispatch` and `useAppSelector` instead."
                 }
             ],
+            "no-debugger": "off"
         }
 }

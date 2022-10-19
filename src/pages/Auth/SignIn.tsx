@@ -17,7 +17,7 @@ import { Helmet } from "react-helmet-async";
 import { useSigninMutation } from "../../app/services/auth";
 import GoogleLogin from "./GoogleSignin";
 import { useAppSelector } from "../../hooks/useStore";
-import { selectIsAuthenticated } from "../../features/auth/authSlice";
+import { selectIsAuthenticated } from "../../features/authSlice";
 
 type SignInData = {
 	email: string;
