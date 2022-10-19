@@ -1,24 +1,12 @@
-import { IUser } from './User';
-import { IAuthContext } from './Auth';
-
-interface IAppointment {
-    doctor: IUser;
-    patient: IUser;
-    date: string;
-    duration: string;
-    pateint_appeared: boolean;
-    comment: string;
-}
-
-interface IRequest {
-    id: string;
-    user: IUser;
-    symptoms: string[];
-    comment: string;
-
-}
+import { User } from './User';
+import { Auth, Token } from './Auth';
+import { Request } from './Request'
+import { Appointment } from './Appointment'
 
 export type {
-    IUser,
-    IAuthContext
+    User,
+    Auth,
+    Token,
+    Request,
+    Appointment
 }

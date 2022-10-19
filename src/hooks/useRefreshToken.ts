@@ -1,4 +1,4 @@
-import { IAuthContext } from "../types";
+import { Auth } from "../types";
 import { axiosPublic as axios } from "../utils/axios";
 import useAuth from './useAuth'
 
@@ -14,11 +14,11 @@ const useRefreshToken = () => {
         setAuth({
             ...auth,
             accessToken: res.data.access
-        } as IAuthContext)
+        } as Auth)
 
         return res.data.access
     }
-
+    
     return refresh
 }
 

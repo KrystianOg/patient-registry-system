@@ -1,11 +1,17 @@
-import { IUser } from './User'
+import { User } from './User'
 
-interface IAuthContext {
-    user: IUser;
-    accessToken: string;
-    refreshToken: string;
+interface Auth {
+    user: User | null;
+    accessToken: string | null;
+    refreshToken: string | null;
+}
+
+interface Token {
+    accessToken: string | null;
+    refreshToken: string | null;
 }
 
 export type {
-    IAuthContext
+    Auth,
+    Token
 }
