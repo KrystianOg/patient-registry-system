@@ -22,14 +22,14 @@ const getDesignTokens = (mode: PaletteMode) => ({
 					paper: "#ebf3ff",
 				},
 				primary: {
-					main: "#48CAE4",
-					light: "#ADE8F4",
-					dark: "#0096C7",
+					main: "#33B9F2",
+					light: "#7DD2F7",
+					dark: "#085A7D",
 				},
 				secondary: {
-					main: "#70E000",
-					light: "#CCFF33",
-					dark: "#008000",
+					main: "#FF4D6D",
+					light: "#FF8FA3",
+					dark: "#A4133C",
 				},
 				text: {
 					primary: "#000000",
