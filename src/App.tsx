@@ -15,8 +15,37 @@ import {
 	AddRequest,
 	NotFound,
 } from "./pages";
+<<<<<<< Updated upstream
 
 const App = () => {
+=======
+import { gapi } from "gapi-script";
+import config from "./config.json";
+import getBrowserLocales from "./utils/browserLocales";
+
+const StyledContainer = styled(Box)(({ theme }) => ({
+	backgroundColor: theme.palette.background.default,
+	height: "100vh",
+	width: "100vw",
+}));
+
+const App = () => {
+	//add gapi
+
+	useEffect(() => {
+		const initClient = () => {
+			gapi.client.init({
+				clientId: config.google_clientId,
+				scope: "",
+			});
+			gapi.load("client:auth2", initClient);
+		};
+
+		const lang = getBrowserLocales();
+		console.log(lang);
+	});
+
+>>>>>>> Stashed changes
 	return (
 		<>
 			<Navbar />

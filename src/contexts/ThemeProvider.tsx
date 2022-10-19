@@ -15,6 +15,7 @@ const getDesignTokens = (mode: PaletteMode) => ({
 		mode,
 		...(mode === "light"
 			? {
+<<<<<<< Updated upstream
 					// palette values for light mode
 					background: {
 						default: "#F8FBFF",
@@ -35,6 +36,28 @@ const getDesignTokens = (mode: PaletteMode) => ({
 						secondary: "#333333",
 					},
 			  }
+=======
+				// palette values for light mode
+				background: {
+					default: "#F8FBFF",
+					paper: "#ebf3ff",
+				},
+				primary: {
+					main: "#33B9F2",
+					light: "#7DD2F7",
+					dark: "#085A7D",
+				},
+				secondary: {
+					main: "#FF4D6D",
+					light: "#FF8FA3",
+					dark: "#A4133C",
+				},
+				text: {
+					primary: "#000000",
+					secondary: "#333333",
+				},
+			}
+>>>>>>> Stashed changes
 			: {
 					// palette values for dark mode
 					background: {

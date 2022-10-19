@@ -1,7 +1,13 @@
 import { Box, Stack, BottomNavigationAction, styled } from "@mui/material";
-import { CalendarToday, Home, Person } from "@mui/icons-material";
+import {
+	CalendarMonth,
+	Person,
+	MonitorHeart,
+	MoreTime,
+} from "@mui/icons-material";
 import { useState } from "react";
 import Stetoscope from "../../static/stetoscope";
+import React from "react";
 
 const StickRightBox = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.background.paper,
@@ -23,22 +29,23 @@ const SideNav = () => {
 
 	return (
 		<StickRightBox>
-			<Stack>
-				<BottomNavigationAction
-					label="Appointments"
-					value={BottomNavButtons.Appointments}
-					icon={<Stetoscope />}
-				/>
-				<BottomNavigationAction
-					label="Home"
-					value={BottomNavButtons.Home}
-					icon={<Home />}
-				/>
+			<Stack direction="column">
 				<BottomNavigationAction
 					label="Calendar"
 					value={BottomNavButtons.Calendar}
-					icon={<CalendarToday />}
+					icon={<CalendarMonth />}
 				/>
+				<BottomNavigationAction
+					label="Appointments"
+					value={BottomNavButtons.Appointments}
+					icon={<MonitorHeart />}
+				/>
+				<BottomNavigationAction
+					label="Requests"
+					value={BottomNavButtons.Home}
+					icon={<MoreTime />}
+				/>
+
 				<BottomNavigationAction
 					label="Account"
 					value={BottomNavButtons.Account}
