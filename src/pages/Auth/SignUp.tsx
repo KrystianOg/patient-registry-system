@@ -133,17 +133,15 @@ export default function SignUp() {
 						type="submit"
 						fullWidth
 						variant="contained"
-						sx={{ mt: 3, mb: 2 }}
+						sx={{ mt: 3, mb: 2, borderRadius: "20px" }}
 					>
-						Sign Up
+						CREATE ACCOUNT
 					</Button>
-					<Grid container>
-						<Grid item>
-							<StyledTextLink to="/signin">
-								Already a member? Sign in
-							</StyledTextLink>
-						</Grid>
-					</Grid>
+					<Box sx={{ justifyContent: "center", display: "flex" }}>
+						<StyledTextLink to="/signin">
+							Already a member? Sign in
+						</StyledTextLink>
+					</Box>
 				</Box>
 			</Box>
 		</StyledContainer>

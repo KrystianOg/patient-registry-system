@@ -1,7 +1,7 @@
 import { Box, styled } from "@mui/material";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { NavigationOutlet, RequireAuth, Loading } from "./components";
+import { NavigationOutlet, RequireAuth } from "./components";
 import {
 	Home,
 	SignIn,
@@ -11,6 +11,8 @@ import {
 	Account,
 	Calendar,
 	Appointments,
+	Appointment,
+	AddAppointment,
 	Requests,
 	Request,
 	AddRequest,
@@ -40,37 +42,38 @@ const App = () => {
 
 	return (
 		<StyledContainer>
-			<Suspense fallback={<Loading />}>
-				<Routes>
-					<Route path="/">
-						{/* public routes */}
-						<Route element={<NavigationOutlet />}>
-							<Route index element={<Home />} />
-						</Route>
-						<Route path="signin" element={<SignIn />} />
-						<Route path="signup" element={<SignUp />} />
-						<Route path="restore" element={<RestorePassword />} />
-						<Route path="Unauthorized" element={<Unauthorized />} />
+			<Routes>
+				<Route path="/">
+					{/* public routes */}
+					<Route element={<NavigationOutlet />}>
+						<Route index element={<Home />} />
+					</Route>
+					<Route path="signin" element={<SignIn />} />
+					<Route path="signup" element={<SignUp />} />
+					<Route path="restore" element={<RestorePassword />} />
+					<Route path="Unauthorized" element={<Unauthorized />} />
 
-						{/* private routes */}
-						<Route element={<RequireAuth />}>
-							<Route path="account" element={<Account />} />
-							<Route path="calendar" element={<Calendar />} />
-							<Route path="appointments" element={<Appointments />} />
-							<Route path="requests">
-								<Route index element={<Requests />} />
-								<Route path=":id" element={<Request />} />
-								<Route path="create" element={<AddRequest />} />
-							</Route>
+					{/* private routes */}
+					<Route element={<RequireAuth />}>
+						<Route path="account" element={<Account />} />
+						<Route path="calendar" element={<Calendar />} />
+						<Route path="appointments" element={<Appointments />}>
+							<Route path=":id" element={<Appointment />} />
+							<Route path="create" element={<AddAppointment />} />
 						</Route>
-
-						{/* catch all */}
-						<Route element={<NavigationOutlet />}>
-							<Route path="*" element={<NotFound />} />
+						<Route path="requests">
+							<Route index element={<Requests />} />
+							<Route path=":id" element={<Request />} />
+							<Route path="create" element={<AddRequest />} />
 						</Route>
 					</Route>
-				</Routes>
-			</Suspense>
+
+					{/* catch all */}
+					<Route element={<NavigationOutlet />}>
+						<Route path="*" element={<NotFound />} />
+					</Route>
+				</Route>
+			</Routes>
 		</StyledContainer>
 	);
 };

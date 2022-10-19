@@ -1,21 +1,23 @@
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import {
+	Avatar,
+	Button,
+	TextField,
+	FormControlLabel,
+	Checkbox,
+	Grid,
+	Stack,
+	Box,
+	Typography,
+} from "@mui/material/";
 import { StyledTextLink, StyledContainer } from "./StyledComponents";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import { LockOutlined } from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { QuickHelmet } from "../../components";
-import { Stack } from "@mui/material";
-import { selectIsAuthenticated } from "../../features/auth/authSlice";
+import { Helmet } from "react-helmet-async";
 import { useSigninMutation } from "../../app/services/auth";
+import GoogleLogin from "./GoogleSignin";
 import { useAppSelector } from "../../hooks/useStore";
-import GoogleLogin from "./GoogleLogin";
+import { selectIsAuthenticated } from "../../features/auth/authSlice";
 
 type SignInData = {
 	email: string;
@@ -45,6 +47,7 @@ export default function SignIn() {
 
 	const loginUser = async (e?: any) => {
 		e?.preventDefault();
+
 		signin(formData)
 			.unwrap()
 			.then(() => navigate("/", { replace: true, state: { from } }));
@@ -52,7 +55,9 @@ export default function SignIn() {
 
 	return (
 		<StyledContainer maxWidth="xs">
-			<QuickHelmet title="PRS - Sign In" />
+			<Helmet>
+				<title>Sign In</title>
+			</Helmet>
 			<Box
 				sx={{
 					marginTop: 8,
@@ -92,6 +97,7 @@ export default function SignIn() {
 						autoComplete="current-password"
 						value={formData.password}
 						onChange={handleChange}
+						sx={{ borderRadius: "20px" }}
 						error={error}
 						helperText={error ? "Invalid email or password" : ""}
 					/>
@@ -107,33 +113,36 @@ export default function SignIn() {
 						}
 						label="Remember me"
 					/>
-					<Stack
-						direction="row"
-						alignItems="center"
-						justifyContent="space-between"
-						spacing="2"
-					>
-						<Button variant="contained" sx={{ mt: 3, mb: 2 }}>
-							GO BACK
-						</Button>{" "}
-						{/* TODO: some navigation with replace GO BACK */}
-						<Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+					<Stack spacing={2} alignItems="center" sx={{ mb: 3 }}>
+						<Button
+							type="submit"
+							variant="contained"
+							sx={{
+								mt: 3,
+								mb: 2,
+								width: "100%",
+								borderRadius: "20px",
+								color: "white",
+							}}
+						>
 							Sign In
 						</Button>
+						Or
+						<GoogleLogin
+							// navigateTo="/calendar"
+							sx={{ width: "100%", borderRadius: "20px" }}
+						/>
 					</Stack>
-					<Grid container>
-						<Grid item xs>
-							<StyledTextLink to="/forgotpassword">
-								Forgot password?
-							</StyledTextLink>
-						</Grid>
-						<Grid item>
-							<StyledTextLink to="/signup">
-								Don't have an account? Sign Up
-							</StyledTextLink>
-						</Grid>
-					</Grid>
-					<GoogleLogin />
+
+					<Stack justifyContent="space-between" direction="row">
+						<StyledTextLink to="/forgotpassword">
+							Forgot password?
+						</StyledTextLink>
+
+						<StyledTextLink to="/signup">
+							Don't have an account? Sign Up
+						</StyledTextLink>
+					</Stack>
 				</Box>
 			</Box>
 		</StyledContainer>
