@@ -1,9 +1,9 @@
 import { createContext, useState } from "react";
-import { IAuthContext } from "../types";
+import { Auth } from "../types";
 
 type AuthContextUseState = {
-	auth: IAuthContext | undefined;
-	setAuth: (auth: IAuthContext | undefined) => void;
+	auth: Auth | undefined;
+	setAuth: (auth: Auth | undefined) => void;
 };
 
 const AuthContext = createContext<AuthContextUseState>(
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const AuthProvider = ({ children }: Props) => {
-	const [auth, setAuth] = useState<IAuthContext | undefined>(undefined);
+	const [auth, setAuth] = useState<Auth | undefined>(undefined);
 
 	return (
 		<AuthContext.Provider value={{ auth, setAuth }}>
