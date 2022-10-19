@@ -42,8 +42,13 @@ const App = () => {
 					{/* private routes */}
 					<Route element={<RequireAuth allowedUserType={[]} />}>
 						<Route path="account" element={<Account />} />
-						{/* <Route path="calendar" element={<Calendar />} /> */}
-						<Route path="appointments" element={<Appointments />} />
+
+						<Route path="calendar" element={<Calendar />} />
+						<Route path="appointments">
+							<Route index element={<Appointments />} />
+							{/* <Route path=":id" element={<Appointment />} />
+							<Route path="create" element={<AddAppointment />} /> */}
+						</Route>
 						<Route path="requests">
 							<Route index element={<Requests />} />
 							<Route path=":id" element={<Request />} />
