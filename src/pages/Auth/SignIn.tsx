@@ -4,7 +4,6 @@ import {
 	TextField,
 	FormControlLabel,
 	Checkbox,
-	Grid,
 	Stack,
 	Box,
 	Typography,
@@ -39,7 +38,7 @@ export default function SignIn() {
 		rememberMe: false,
 	});
 
-	const [error, setError] = useState<boolean>(false);
+	const [error] = useState<boolean>(false);
 
 	const handleChange = (e: any) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });

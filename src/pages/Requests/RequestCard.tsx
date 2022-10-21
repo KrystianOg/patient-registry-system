@@ -10,7 +10,7 @@ import {
 	CardContent,
 	useTheme,
 } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { StyledAvatar, StyledCard } from "../../components";
 
 interface Props {
