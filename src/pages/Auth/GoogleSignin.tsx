@@ -5,7 +5,6 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, ButtonProps, styled } from "@mui/material";
 import { Google as GoogleIcon } from "@mui/icons-material";
-const clientId = config.google_clientId;
 
 const StyledGoogleSignin = styled(Button)(({ theme }) => ({
 	backgroundColor: theme.palette.primary.main,
@@ -36,7 +35,7 @@ const SignIn = (props: ButtonProps) => {
 
 	return (
 		<GoogleLogin
-			clientId={clientId}
+			clientId={config.GOOGLE_CLIENT_ID}
 			buttonText="Login"
 			onSuccess={onGoogleLoginSuccess}
 			onFailure={onFailure}

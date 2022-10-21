@@ -9,10 +9,11 @@ import {
 	Person,
 	MonitorHeart,
 	MoreTime,
+	AddAlert,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import Stetoscope from "../../static/stetoscope";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import React from "react";
 
@@ -20,8 +21,10 @@ const StickBottomNavigation = styled(BottomNavigation)(({ theme }) => ({
 	backgroundColor: theme.palette.background.paper,
 	borderRadius: "15px 15px 0 0",
 	bottom: 0,
-	position: "fixed",
+	left: 0,
 	width: "100vw",
+	position: "fixed",
+	zIndex: 2,
 }));
 
 enum BottomNavButtons {
@@ -80,6 +83,9 @@ const BottomNav = () => {
 				onClick={() => navigate("/appointments")}
 				icon={<MonitorHeart />}
 			/>
+			<NavLink to="/appointments">
+				<AddAlert />
+			</NavLink>
 
 			<StyledBottomNA
 				label="Requests"

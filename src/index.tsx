@@ -6,6 +6,7 @@ import App from "./App";
 import { SnackbarProvider } from "notistack";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { useChainProviders } from "react-flat-providers";
 import AuthProvider from "./contexts/AuthProvider";
 import ThemeProvider from "./contexts/ThemeProvider";
 import { Provider as ReduxProvider } from "react-redux";
@@ -19,20 +20,19 @@ const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
 );
 
+//use chain providers to prevent deep providers nesting
+const ChainedProviders = useChainProviders()
+	.add(React.StrictMode)
+	.add(ReduxProvider, { store: store })
+	.add(AuthProvider)
+	.add(HelmetProvider)
+	.add(ThemeProvider)
+	.add(SnackbarProvider)
+	.add(BrowserRouter)
+	.make();
+
 root.render(
-	<React.StrictMode>
-		<ReduxProvider store={store}>
-			<AuthProvider>
-				<HelmetProvider>
-					<ThemeProvider>
-						<SnackbarProvider>
-							<BrowserRouter>
-								<App />
-							</BrowserRouter>
-						</SnackbarProvider>
-					</ThemeProvider>
-				</HelmetProvider>
-			</AuthProvider>
-		</ReduxProvider>
-	</React.StrictMode>
+	<ChainedProviders>
+		<App />
+	</ChainedProviders>
 );

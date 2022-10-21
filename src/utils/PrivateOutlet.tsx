@@ -1,11 +1,9 @@
-import { Suspense } from "react";
 import { useLocation, Outlet } from "react-router-dom";
-import { Loading } from "../components";
 import Navbar from "../components/Navbar";
 import { selectIsAuthenticated } from "../features/authSlice";
 import { useAppSelector } from "../hooks/useStore";
 import type { UserType } from "../types/User";
-
+import { SlideInNav } from "../components";
 interface IProps {
 	allowedUserType?: UserType[];
 }
@@ -20,9 +18,9 @@ const PrivateOutlet = ({ allowedUserType }: IProps) => {
 		// ) ?
 		<>
 			<Navbar />
-			<Suspense fallback={<Loading />}>
-				<Outlet />
-			</Suspense>
+			<SlideInNav />
+			<Outlet />
+
 			{/* <Footer /> */}
 		</>
 	);

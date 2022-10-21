@@ -11,8 +11,9 @@ import React from "react";
 
 const StickRightBox = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.background.paper,
-	cornerRadius: "15px 0 0 15px",
+	borderRadius: "15px 0 0 15px",
 	right: 0,
+	top: 0,
 	position: "fixed",
 	height: "100vh",
 }));
