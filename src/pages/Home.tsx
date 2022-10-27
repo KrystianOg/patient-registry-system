@@ -14,6 +14,9 @@ const Home = () => {
 			<p>sign in & sign up</p>
 			<p>introduce JWT</p>
 			<p>introduce Redux</p>
+			<p>RTK Query</p>
+			<p>Redux thunk</p>
+			<p>Redux persist</p>
 		</Stack>
 	);
 };

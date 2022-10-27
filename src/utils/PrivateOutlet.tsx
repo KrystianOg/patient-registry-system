@@ -1,32 +1,34 @@
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation, Outlet, redirect, Navigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { selectIsAuthenticated } from "../features/authSlice";
+//import { selectIsAuthenticated } from "../features/authSlice";
 import { useAppSelector } from "../hooks/useStore";
 import type { UserType } from "../types/User";
 import { SlideInNav } from "../components";
+import {
+	selectCurrentUser,
+	selectIsAuthenticated,
+} from "../features/authSlice";
+
 interface IProps {
-	allowedUserType?: UserType[];
+	allowedUserType: UserType[];
 }
 
 const PrivateOutlet = ({ allowedUserType }: IProps) => {
-	const location = useLocation();
 	const isAuthenticated = useAppSelector(selectIsAuthenticated);
-
-	return (
-		// allowedUserType?.includes(
-		// 	auth?.user?.type as NonNullable<UserType>
-		// ) ?
+	const user = useAppSelector(selectCurrentUser);
+	return isAuthenticated ? (
 		<>
-			<Navbar />
-			<SlideInNav />
-			<Outlet />
-
-			{/* <Footer /> */}
+			{user?.types.some((t) => allowedUserType.includes(t)) && (
+				<>
+					<Navbar />
+					{/* <SlideInNav /> */}
+					<Outlet />
+				</>
+			)}
 		</>
+	) : (
+		<Navigate to="/signin" replace />
 	);
-	// : (
-	// 	<Navigate to="/signin" state={{ from: location }} replace />
-	// );
 };
 
 export default PrivateOutlet;

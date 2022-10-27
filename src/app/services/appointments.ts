@@ -1,6 +1,6 @@
 import { retry } from '@reduxjs/toolkit/query/react'
 import { api } from './api'
-import { Appointment } from '../../types'
+import { Appointment, CreateAppointment } from '../../types'
 
 type Appointments = Appointment[]
 
@@ -11,15 +11,17 @@ export const appointmentsApi = api.injectEndpoints({
                 url: '/appointments/',
                 method: 'GET'
             }),
+            providesTags: ['Appointment']
         }),
-        addAppointment: build.mutation<Appointment, Partial<Appointment>>({
-            query: (body: Appointment) => {
+        addAppointment: build.mutation<Appointment, Partial<CreateAppointment>>({
+            query: (body: CreateAppointment) => {
                 return {
                     url: '/appointments/',
                     method: 'POST',
                     body
                 }
             },
+            invalidatesTags: ['Appointment', 'Request']
         }),
         getAppointment: build.query<Appointment, number>({
             query: (id: number) => `/appointments/${id}/`,
@@ -32,7 +34,8 @@ export const appointmentsApi = api.injectEndpoints({
                     method: 'PUT',
                     body
                 }
-            }
+            },
+            invalidatesTags: ['Appointment']
         }),
         deleteAppointment: build.mutation<{success: boolean, id: number}, number>({
             query: (id: number) => {
@@ -40,7 +43,8 @@ export const appointmentsApi = api.injectEndpoints({
                     url: `/appointments/${id}/`,
                     method: 'DELETE'
                 }
-            }
+            },
+            invalidatesTags: ['Appointment']
         })
     })
 })
@@ -52,3 +56,9 @@ export const {
     useUpdateAppointmentMutation,
     useDeleteAppointmentMutation
 } = appointmentsApi
+
+export const {
+    endpoints: { getAppointments, addAppointment, getAppointment, updateAppointment, deleteAppointment }
+} = appointmentsApi
+
+export const selectAllAppointments = appointmentsApi.endpoints.getAppointments.select()

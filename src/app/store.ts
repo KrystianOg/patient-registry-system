@@ -1,23 +1,27 @@
 import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { api } from './services/api'
-import {auth, snack, requests, appointments } from '../features'
+import {auth, snacks, requests, appointments } from '../features'
 
-export const createStore = (
+const thunk = (store: any) => (next: any) => (action: any) =>
+    typeof action === 'function'
+        ? action(store.dispatch, store.getState)
+        : next(action)
+
+const createStore = (
     options?: ConfigureStoreOptions['preloadedState'] | undefined
 ) => configureStore({
     reducer: {
-        [api.reducerPath]: api.reducer,
         auth,
-        snack,
+        snacks,
         requests,
-        appointments
+        appointments,
+        [api.reducerPath]: api.reducer,
     },
     devTools: true,
-    middleware: (getDefaultMiddleware) => 
-        getDefaultMiddleware().concat(api.middleware),
-    ...options
+    middleware: [thunk, api.middleware]
 })
+
 
 export const store = createStore()
 

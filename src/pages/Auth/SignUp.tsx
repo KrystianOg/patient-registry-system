@@ -5,12 +5,25 @@ import Box from "@mui/material/Box";
 import { LockOutlined } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import { StyledContainer, StyledTextLink } from "./StyledComponents";
-import { axiosPublic as axios } from "../../utils/axios";
+import { useSignupMutation } from "../../app/services/auth";
 import { useNavigate } from "react-router-dom";
 import { QuickHelmet } from "../../components";
 import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useLocation } from "react-router-dom";
+import {
+	selectIdFromToken,
+	setCredentials,
+	setUserInfo,
+} from "../../features/authSlice";
+import type { SignupCredentials } from "../../types";
+import { useEffect, useState } from "react";
+import { useGetUserQuery } from "../../app/services/users";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
 export default function SignUp() {
+	const dispatch = useAppDispatch();
+	const location = useLocation();
 	const navigate = useNavigate();
 	const {
 		register,
@@ -18,29 +31,38 @@ export default function SignUp() {
 		formState: { errors },
 		watch,
 	} = useForm();
+	const [formData, setFormData] = useState<SignupCredentials>({
+		email: "",
+		password: "",
+		password2: "",
+	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const onSubmit = async (data: any) => {
-		await axios
-			.post("/auth/signup/", data)
-			.then((response) => {
-				console.log(response);
+	const handleChange = (e: any) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
 
-				if (response.status === 201) {
-					// for now login after signup, TODO: change to email verification
-					navigate("/signin");
-				} else if (response.status === 409) {
-					//409 conflict - user already registered
-					console.log("user is already registered");
-				} else if (response.status === 400) {
-					//400 bad request - passwords don't match
-					console.log("passwords do not match");
-				} else {
-					console.log("error");
-				}
+	const id = useAppSelector(selectIdFromToken);
+	const [signup, { isLoading }] = useSignupMutation();
+
+	const { data: userData, refetch } = useGetUserQuery(id ?? skipToken);
+	useEffect(() => {
+		console.log("Reloaded");
+		if (userData) {
+			dispatch(setUserInfo(userData));
+			navigate("/appointments");
+		}
+	}, [userData]);
+	const registerUser = async (e?: any) => {
+		e?.preventDefault();
+
+		await signup(formData)
+			.unwrap()
+			.then((res) => {
+				dispatch(setCredentials(res));
+				refetch();
 			})
-			.catch((error) => {
-				console.log(error);
+			.catch((err) => {
+				console.log(err);
 			});
 	};
 
@@ -54,7 +76,6 @@ export default function SignUp() {
 					flexDirection: "column",
 					alignItems: "center",
 				}}
-				onSubmit={handleSubmit(onSubmit)}
 			>
 				<Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
 					<LockOutlined />
@@ -62,7 +83,11 @@ export default function SignUp() {
 				<Typography component="h1" variant="h5">
 					Sign Up
 				</Typography>
-				<Box component="form" sx={{ mt: 1 }}>
+				<Box
+					component="form"
+					sx={{ mt: 1 }}
+					onSubmit={(e: any) => registerUser(e)}
+				>
 					<TextField
 						margin="normal"
 						required
@@ -79,6 +104,7 @@ export default function SignUp() {
 								message: "Invalid email",
 							},
 						})}
+						onChange={(e: any) => handleChange(e)}
 						helperText={errors.email?.message && String(errors.email.message)}
 						error={errors.email?.message !== undefined}
 					/>
@@ -102,6 +128,7 @@ export default function SignUp() {
 									"Password must contain at least one uppercase letter, one lowercase letter, and one number",
 							},
 						})}
+						onChange={(e: any) => handleChange(e)}
 						helperText={
 							errors.password?.message && String(errors.password.message)
 						}
@@ -123,6 +150,7 @@ export default function SignUp() {
 								}
 							},
 						})}
+						onChange={(e: any) => handleChange(e)}
 						helperText={
 							errors.password2?.message && String(errors.password2.message)
 						}
@@ -132,7 +160,7 @@ export default function SignUp() {
 						type="submit"
 						fullWidth
 						variant="contained"
-						sx={{ mt: 3, mb: 2, borderRadius: "20px" }}
+						sx={{ mt: 3, mb: 2, borderRadius: "20px", color: "white" }}
 					>
 						CREATE ACCOUNT
 					</Button>

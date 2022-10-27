@@ -11,6 +11,7 @@ export const requestsApi = api.injectEndpoints({
                 url: '/requests/',
                 method: 'GET'
             }),
+            providesTags: ['Request']
         }),
         addRequest: build.mutation<Request, Partial<Request>>({
             query: (body: Request) => {
@@ -20,6 +21,7 @@ export const requestsApi = api.injectEndpoints({
                     body
                 }
             },
+            invalidatesTags: ['Request']
         }),
         getRequest: build.query<Request, number>({
             query: (id: number) => `/requests/${id}/`,
@@ -32,7 +34,8 @@ export const requestsApi = api.injectEndpoints({
                     method: 'PUT',
                     body
                 }
-            }
+            },
+            invalidatesTags: ['Request']
         }),
         deleteRequest: build.mutation<{success: boolean, id: number}, number>({
             query: (id: number) => {
@@ -40,7 +43,8 @@ export const requestsApi = api.injectEndpoints({
                     url: `/requests/${id}/`,
                     method: 'DELETE'
                 }
-            }
+            },
+            invalidatesTags: ['Request']
         })
     })
 })
@@ -51,4 +55,8 @@ export const {
     useGetRequestQuery,
     useUpdateRequestMutation,
     useDeleteRequestMutation
+} = requestsApi
+
+export const {
+    endpoints: { getRequests, addRequest, getRequest, updateRequest, deleteRequest }
 } = requestsApi

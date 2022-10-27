@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store'
-import { User } from '../types';
 
 interface Snack {
     message: string;
@@ -10,7 +9,7 @@ interface Snack {
 const initialState: Snack[] = []
 
 const slice = createSlice({
-    name: 'snack',
+    name: 'snacks',
     initialState,
     reducers: {
         create: (state, action: PayloadAction<Snack>) => {
@@ -22,5 +21,5 @@ const slice = createSlice({
 export const { create } = slice.actions
 export default slice.reducer
 
-export const selectSnacks = (state: RootState) => state.snack
+export const selectSnacks = (state: RootState) => state.snacks
 

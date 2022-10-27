@@ -7,7 +7,6 @@ import { SnackbarProvider } from "notistack";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useChainProviders } from "react-flat-providers";
-import AuthProvider from "./contexts/AuthProvider";
 import ThemeProvider from "./contexts/ThemeProvider";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./app/store";
@@ -24,7 +23,6 @@ const root = ReactDOM.createRoot(
 const ChainedProviders = useChainProviders()
 	.add(React.StrictMode)
 	.add(ReduxProvider, { store: store })
-	.add(AuthProvider)
 	.add(HelmetProvider)
 	.add(ThemeProvider)
 	.add(SnackbarProvider)

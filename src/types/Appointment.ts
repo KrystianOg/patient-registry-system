@@ -1,16 +1,25 @@
-import type { User } from './User'
+import type { BaseUser } from './User'
 
 interface Appointment {
     id: number;
-    doctor: User;
-    patient: User;
+    doctor: BaseUser;
+    patient: BaseUser;
     date: Date;
-    duration: number;
-    symptoms: string[];
-    patientAppeared: boolean;
-    comment: string;
+    duration: string;
+    symptoms?: string[];
+    patientAppeared?: boolean;
+    comment?: string;
+}
+
+interface CreateAppointment extends Omit<Appointment, 'doctor' | 'patient' | 'id' | 'date'| 'duration'> {
+    patient: number;
+    doctor: number;
+    date: string;
+    duration: string;
+    request: number;
 }
 
 export type {
-    Appointment
+    Appointment,
+    CreateAppointment
 }

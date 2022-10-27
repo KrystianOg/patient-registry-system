@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 import config from '../../config.json'
-import { User } from '../../types/User'
+import { BaseUser } from '../../types/User'
 import { RootState } from '../store'
 
 const baseQuery = fetchBaseQuery({
@@ -8,7 +8,7 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token
         if (token) {
-            headers.set('Authorization', `Bearer ${token}`)
+            headers.set('Authorization', `Bearer ${token.access}`)
         }
         return headers
     }
@@ -17,9 +17,9 @@ const baseQuery = fetchBaseQuery({
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: baseQuery,
-    tagTypes: [],
+    tagTypes: ['Appointment', 'Request'],
     endpoints: (builder) => ({
-        getUsers: builder.query<User[], void>({
+        getUsers: builder.query<BaseUser[], void>({
             query: () => '/users'
         })
     })

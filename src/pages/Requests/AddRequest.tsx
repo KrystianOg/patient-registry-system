@@ -1,77 +1,87 @@
-import { Add, Close } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 import {
+	Box,
 	Button,
+	Chip,
+	LinearProgress,
 	Stack,
-	styled,
 	TextField,
 	Typography,
 	Zoom,
 } from "@mui/material";
 import { useState } from "react";
-import { SymptomsContainer } from "../../components";
+import { StyledButton, SymptomsContainer } from "../../components";
 import { useNavigate } from "react-router-dom";
+import { useAddRequestMutation } from "../../app/services/requests";
 
-const StyledButton = styled(Button)(({ theme }) => ({
-	color: "white",
-	"&:hover": {
-		backgroundColor: theme.palette.secondary.dark,
-		transition: "backgroundColor 0.2s ease-in-out",
-	},
-}));
+interface AddRequestData {
+	symptoms: string[];
+	comment: string;
+}
 
 const AddRequest = () => {
 	const [addSymptom, setAddSymptom] = useState<string>("");
-	const [symptoms, setSymptoms] = useState<string[]>([]);
+	const [formData, setFormData] = useState<AddRequestData>({
+		symptoms: [],
+		comment: "",
+	});
+
 	const navigate = useNavigate();
 	const handleAddSymptom = (key?: string) => {
-		console.log(key);
 		if (!key || key === "Enter") {
 			setAddSymptom("");
 
 			const label = addSymptom.trim();
 			if (!label) return;
-			setSymptoms([...symptoms, label]);
+			setFormData((prev) => ({
+				...prev,
+				symptoms: [...prev.symptoms, label],
+			}));
 		}
 	};
 
-	const handleRemoveSymptom = (index: number) => {
-		setSymptoms(symptoms.filter((_, i) => i !== index));
+	const handleChange = (e: any) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const handleAddRequest = () => {
-		// TODO: some redux logic
+	const handleDelete = (index: number): void => {
+		const newSymptoms = formData.symptoms.filter((_, i) => i !== index);
+		setFormData({ ...formData, symptoms: newSymptoms });
+	};
+
+	const [addRequest, { isLoading }] = useAddRequestMutation();
+
+	const handleAddRequest = async () => {
+		console.log(formData);
+		await addRequest(formData).unwrap();
 		navigate("/requests");
 	};
 
 	return (
 		<Stack spacing={2}>
-			{symptoms.length > 0 && (
-				<>
-					<Typography sx={{ color: "black", fontSize: "16px" }}>
-						Describe your symptoms:
-					</Typography>
+			<>
+				<Typography
+					sx={{ color: "black", fontSize: "16px", marginTop: "48px" }}
+				>
+					Describe your symptoms
+				</Typography>
+				{formData.symptoms.length > 0 && (
 					<SymptomsContainer>
-						{symptoms.map((symptom, index) => (
+						{formData.symptoms.map((symptom, index) => (
 							<Zoom key={symptom} in={true}>
-								<StyledButton
-									key={index}
-									variant="contained"
-									sx={{
-										marginRight: "0.5rem",
-										marginTop: "0.5rem",
-										borderRadius: "20px",
-										color: "white",
-									}}
-									onClick={() => handleRemoveSymptom(index)}
-									endIcon={<Close />}
-								>
-									{symptom}
-								</StyledButton>
+								<Chip
+									color="primary"
+									sx={{ color: "white", margin: "3px" }}
+									key={symptom}
+									label={symptom}
+									onDelete={() => handleDelete(index)}
+									deleteIcon={<Delete sx={{ color: "white" }} />}
+								/>
 							</Zoom>
 						))}
 					</SymptomsContainer>
-				</>
-			)}
+				)}
+			</>
 			<TextField
 				label="Symptom"
 				value={addSymptom}
@@ -89,13 +99,23 @@ const AddRequest = () => {
 					),
 				}}
 			/>
-			<Button
-				variant="contained"
-				sx={{ borderRadius: "20px", color: "white" }}
-				onClick={handleAddRequest}
-			>
-				REQUEST APPOINTMENT
-			</Button>
+			<TextField
+				multiline
+				rows={3}
+				label="Description"
+				name="comment"
+				placeholder="Describe your symptoms"
+				onChange={(e) => handleChange(e)}
+			/>
+			{!isLoading ? (
+				<StyledButton variant="contained" onClick={handleAddRequest}>
+					<Typography sx={{ color: "white" }}>REQUEST APPOINTMENT</Typography>
+				</StyledButton>
+			) : (
+				<Box sx={{ width: "100%" }}>
+					<LinearProgress />
+				</Box>
+			)}
 		</Stack>
 	);
 };

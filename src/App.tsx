@@ -8,7 +8,6 @@ import {
 	RestorePassword,
 	Unauthorized,
 	Account,
-	Calendar,
 	Appointments,
 	AddAppointment,
 	Requests,
@@ -19,12 +18,15 @@ import {
 import { gapi } from "gapi-script";
 import config from "./config.json";
 import { Suspense, useEffect } from "react";
+import WithNav from "./components/Navbar/WithNav";
+import { UserType } from "./types";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
 	paddingTop: "72px",
 	backgroundColor: theme.palette.background.default,
 	height: "100vh",
-	width: "100vw",
+	maxWidth: "100vw!important",
+	padding: "8px",
 }));
 
 const App = () => {
@@ -44,7 +46,7 @@ const App = () => {
 			<Container maxWidth="md">
 				<Suspense fallback={<Loading />}>
 					<Routes>
-						<Route path="/">
+						<Route path="/" element={<WithNav />}>
 							{/* public routes */}
 							<Route index element={<Home />} />
 							<Route path="signin" element={<SignIn />} />
@@ -53,13 +55,24 @@ const App = () => {
 							<Route path="Unauthorized" element={<Unauthorized />} />
 
 							{/* private routes */}
-							<Route element={<RequireAuth allowedUserType={[]} />}>
+							<Route
+								element={
+									<RequireAuth
+										allowedUserType={[UserType.PATIENT, UserType.DOCTOR]}
+									/>
+								}
+							>
 								<Route path="account" element={<Account />} />
 
-								<Route path="calendar" element={<Calendar />} />
 								<Route path="appointments">
 									<Route index element={<Appointments />} />
-									<Route path="create" element={<AddAppointment />} />
+									<Route
+										element={
+											<RequireAuth allowedUserType={[UserType.DOCTOR]} />
+										}
+									>
+										<Route path="create" element={<AddAppointment />} />
+									</Route>
 								</Route>
 								<Route path="requests">
 									<Route index element={<Requests />} />

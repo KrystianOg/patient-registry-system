@@ -10,34 +10,46 @@ import {
 } from "@mui/material/";
 import { StyledTextLink, StyledContainer } from "./StyledComponents";
 import { LockOutlined } from "@mui/icons-material";
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useSigninMutation } from "../../app/services/auth";
 import GoogleLogin from "./GoogleSignin";
-import { useAppSelector } from "../../hooks/useStore";
-import { selectIsAuthenticated } from "../../features/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useSigninMutation } from "../../app/services/auth";
+import {
+	selectIdFromToken,
+	setCredentials,
+	setUserInfo,
+} from "../../features/authSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/useStore";
+import { useGetUserQuery } from "../../app/services/users";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
 type SignInData = {
 	email: string;
 	password: string;
-	rememberMe: boolean;
 };
 
 export default function SignIn() {
-	const [signin] = useSigninMutation();
-	const isAuthenticated = useAppSelector(selectIsAuthenticated);
-
-	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const from = location.state?.from?.pathname || "/";
-
 	const [formData, setFormData] = useState<SignInData>({
 		email: "",
 		password: "",
-		rememberMe: false,
 	});
 
+	const id = useAppSelector(selectIdFromToken);
+	const [signin, { isLoading }] = useSigninMutation();
+	const { data: userData, refetch } = useGetUserQuery(id ?? skipToken);
+	useEffect(() => {
+		console.log("Reloaded");
+		if (userData) {
+			dispatch(setUserInfo(userData));
+			navigate("/appointments");
+		}
+	}, [userData]);
 	const [error] = useState<boolean>(false);
 
 	const handleChange = (e: any) => {
@@ -47,9 +59,13 @@ export default function SignIn() {
 	const loginUser = async (e?: any) => {
 		e?.preventDefault();
 
-		signin(formData)
-			.unwrap()
-			.then(() => navigate("/", { replace: true, state: { from } }));
+		try {
+			const token = await signin(formData).unwrap();
+			dispatch(setCredentials(token));
+			refetch();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	return (
@@ -108,10 +124,9 @@ export default function SignIn() {
 						control={
 							<Checkbox
 								value="remember"
+								name="rememberMe"
 								color="primary"
-								onChange={(e) => {
-									setFormData({ ...formData, rememberMe: !e.target.checked });
-								}}
+								onChange={handleChange}
 							/>
 						}
 						label="Remember me"

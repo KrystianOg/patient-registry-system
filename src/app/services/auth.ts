@@ -1,34 +1,31 @@
 import { api } from './api'
-import { User } from '../../types'
+import type { SigninCredentials, SignupCredentials, Token } from '../../types/Auth'
 
-interface SignInCredentials {
-    email: string,
-    password: string
-}
-
-interface SignUpCredentials {
-    email: string,
-    password: string,
-    password2: string
-}
 
 export const authApi = api.injectEndpoints({
     endpoints: (build) => ({
-        signin: build.mutation<{token: string, user: User}, Partial<SignInCredentials>>({
-            query: (credentials: SignInCredentials) => ({
+        signin: build.mutation<Token, SigninCredentials>({
+            query: (credentials: SigninCredentials) => ({
                 url: '/auth/token/',
                 method: 'POST',
-                body: credentials
+                body: credentials,
             }),
         }),
-        signup: build.mutation<{message: string}, Partial<SignUpCredentials>>({
-            query: (credentials: SignUpCredentials) => ({
+        signup: build.mutation<Token, Partial<SignupCredentials>>({
+            query: (credentials: SignupCredentials) => ({
                 url: '/auth/signup/',
                 method: 'POST',
-                body: credentials
+                body: credentials,
             }),
         }),
-        signinWithGoogle: build.mutation<{idtoken: string}, Partial<string>>({
+        signupDoctor: build.mutation<Token, Partial<SignupCredentials>>({
+            query: (credentials: SignupCredentials) => ({
+                url: '/auth/signup/doctor/',
+                method: 'POST',
+                body: credentials,
+            }),
+        }),
+        signinWithGoogle: build.mutation<Token, Partial<string>>({
             query: (idToken: string) => ({
                 url: '/auth/google/signin/',
                 method: 'GET',
@@ -44,9 +41,10 @@ export const authApi = api.injectEndpoints({
 
 export const {
     useSigninMutation,
+    useSignupMutation,
     useSigninWithGoogleMutation
 } = authApi
 
 export const {
-    endpoints: { signin, signinWithGoogle }
+    endpoints: { signin, signup, signinWithGoogle }
 } = authApi

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store'
 import type { Appointment } from '../types'
 
@@ -31,6 +31,5 @@ const slice = createSlice({
 export const { add, bulkAdd, update, remove } = slice.actions
 export default slice.reducer
 
-export const selectAppointments = (state: RootState) => state.appointments
-export const selectAppointment = (state: RootState, id: number) => state.appointments.find(appointment => appointment.id === id)
-
+export const selectAllAppointments = (state: RootState) => state.appointments
+export const selectAppointmentById = (state: RootState, id: number) => state.appointments.find(appointment => appointment.id === id)

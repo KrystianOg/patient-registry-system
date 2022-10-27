@@ -1,15 +1,15 @@
 import { Box, Button, Stack, TextField } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { useState } from "react";
+import type { Appointment } from "../../types";
 
-const Appointment = () => {
-	const [symptoms, setSymptoms] = useState<string[]>(["label1", "label2"]);
+const Appointment = ({ id, symptoms, patient, doctor }: Appointment) => {
+	//const [symptoms, setSymptoms] = useState<string[]>();
 
 	return (
 		<Stack>
-			<TextField label="Patient's name" />
+			<TextField label={patient.username} />
 			<Box>
-				{symptoms.map((symptom, index) => (
+				{symptoms?.map((symptom, index) => (
 					<Button key={index} variant="contained" endIcon={<Close />}>
 						{symptom}
 					</Button>

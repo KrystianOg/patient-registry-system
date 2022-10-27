@@ -9,17 +9,11 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { MoreVert } from "@mui/icons-material";
-import { Request } from "../../types";
+import { Appointment } from "../../types";
 import { TimePicker, DateTimePicker } from "@mui/x-date-pickers";
 import { StyledAvatar, StyledCard } from "../../components";
 
-interface Props {
-	id: number;
-	name: string;
-	comment: string;
-}
-
-const AppointmentCard = ({ id, name, comment }: Props) => {
+const AppointmentCard = ({ id, doctor, patient, comment }: Appointment) => {
 	const [value, setValue] = useState<Dayjs | null>(
 		dayjs("2014-08-18T21:11:54")
 	);
@@ -29,16 +23,29 @@ const AppointmentCard = ({ id, name, comment }: Props) => {
 	return (
 		<Grid item xs={4}>
 			<StyledCard>
-				<CardHeader avatar={<StyledAvatar>A</StyledAvatar>} title={name} />
+				<CardHeader
+					avatar={<StyledAvatar>A</StyledAvatar>}
+					title={"Patient: " + patient.email}
+					subheader={"Doctor: " + doctor.email}
+				/>
 				<CardContent>
 					<Grid container spacing={{ xs: 1.5, md: 2 }}>
 						<Grid item xs={12}>
+							{patient.first_name && (
+								<Typography
+									sx={{ fontSize: 14 }}
+									color="text.secondary"
+									gutterBottom
+								>
+									`{patient.first_name} {patient.last_name}`
+								</Typography>
+							)}
 							<Typography
 								sx={{ fontSize: 14 }}
 								color="text.secondary"
 								gutterBottom
 							>
-								{comment}
+								Comment: {comment}
 							</Typography>
 						</Grid>
 						<Grid item xs={8}>
@@ -73,14 +80,17 @@ const AppointmentCard = ({ id, name, comment }: Props) => {
 								color="text.secondary"
 								gutterBottom
 							>
-								Doctor: John Doe
+								Doctor:
+								{doctor.first_name
+									? `${doctor.first_name} ${doctor.last_name}`
+									: doctor.email}
 							</Typography>
 						</Grid>
 					</Grid>
 				</CardContent>
-				<CardActions>
+				{/* <CardActions>
 					<MoreVert />
-				</CardActions>
+				</CardActions> */}
 			</StyledCard>
 		</Grid>
 	);

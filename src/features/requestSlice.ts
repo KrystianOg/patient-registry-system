@@ -5,7 +5,7 @@ import type { Request } from '../types'
 const initialState: Request[] = []
 
 const slice = createSlice({
-    name: 'appointments',
+    name: 'requests',
     initialState,
     reducers: {
         // TODO: check if payload differs
@@ -31,6 +31,6 @@ const slice = createSlice({
 export const { add, bulkAdd, update, remove } = slice.actions
 export default slice.reducer
 
-export const selectAppointments = (state: RootState) => state.requests
-export const selectRequest = (state: RootState, id: number) => state.requests.find(request => request.id === id)
+export const selectAllRequests = (state: RootState) => state.requests
+export const selectRequestById = (state: RootState, id: number) => state.requests.find(request => request.id === id)
 

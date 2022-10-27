@@ -1,17 +1,29 @@
-import { User } from './User'
+import { AuthUser } from './User'
 
 interface Auth {
-    user: User | null;
-    accessToken: string | null;
-    refreshToken: string | null;
+    user: AuthUser | null;
+    token: Token | null;
 }
 
 interface Token {
-    accessToken: string | null;
-    refreshToken: string | null;
+    access: string;
+    refresh: string;
+}
+
+interface SigninCredentials {
+	email: string;
+	password: string;
+}
+
+interface SignupCredentials {
+	email: string;
+	password: string;
+	password2: string;
 }
 
 export type {
     Auth,
-    Token
+    Token,
+    SigninCredentials,
+    SignupCredentials
 }

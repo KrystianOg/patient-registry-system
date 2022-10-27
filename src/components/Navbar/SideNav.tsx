@@ -5,9 +5,9 @@ import {
 	MonitorHeart,
 	MoreTime,
 } from "@mui/icons-material";
-import { useState } from "react";
 import Stetoscope from "../../static/stetoscope";
-import React from "react";
+import { useNav, Page } from "../../hooks/useNav";
+import { useNavigate } from "react-router-dom";
 
 const StickRightBox = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.background.paper,
@@ -18,38 +18,29 @@ const StickRightBox = styled(Box)(({ theme }) => ({
 	height: "100vh",
 }));
 
-enum BottomNavButtons {
-	Appointments = "Appointments",
-	Home = "Home",
-	Calendar = "Calendar",
-	Account = "Account",
-}
-
 const SideNav = () => {
-	const [value, setValue] = useState<BottomNavButtons>(BottomNavButtons.Home);
-
+	const page = useNav();
+	const navigate = useNavigate();
 	return (
 		<StickRightBox>
 			<Stack direction="column">
 				<BottomNavigationAction
-					label="Calendar"
-					value={BottomNavButtons.Calendar}
-					icon={<CalendarMonth />}
-				/>
-				<BottomNavigationAction
 					label="Appointments"
-					value={BottomNavButtons.Appointments}
+					value={Page.Appointments}
+					onClick={() => navigate("/appointments")}
 					icon={<MonitorHeart />}
 				/>
 				<BottomNavigationAction
 					label="Requests"
-					value={BottomNavButtons.Home}
+					value={Page.Requests}
+					onClick={() => navigate("/requests")}
 					icon={<MoreTime />}
 				/>
 
 				<BottomNavigationAction
 					label="Account"
-					value={BottomNavButtons.Account}
+					value={Page.Account}
+					onClick={() => navigate("/account")}
 					icon={<Person />}
 				/>
 			</Stack>

@@ -1,19 +1,14 @@
-import {
-	Fab,
-	styled,
-	Slide,
-	Box,
-	Drawer,
-	TextField,
-	Stack,
-	IconButton,
-} from "@mui/material";
-
+import { Fab, styled, Slide, Drawer, Stack, IconButton } from "@mui/material";
+import { useGoogleLogout } from "react-google-login";
 import { Menu, Close } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSwipeable } from "react-swipeable";
 import { useWindowSize } from "usehooks-ts";
+import { selectIsAuthenticated } from "../../features/authSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { signout } from "../../features/authSlice";
+import GoogleSignout from "../../pages/Auth/GoogleSignout";
 
 const StyledFab = styled(Fab)(({ theme }) => ({
 	backgroundColor: theme.palette.primary.main,
@@ -23,14 +18,6 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 	right: 16,
 	zIndex: 2,
 }));
-
-// const StyledBox = styled(Box)(({ theme }) => ({
-// 	position: "absolute",
-// 	maxWidth: "100%",
-// 	maxHeight: "100%",
-// 	background: theme.palette.background.paper,
-// 	zIndex: 2,
-// }));
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
 	textAlign: "center",
@@ -58,12 +45,10 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const SlideInNav = () => {
-	const [active, setActive] = useState<boolean>(false);
-
+	const authenticated = useAppSelector(selectIsAuthenticated);
+	const dispatch = useAppDispatch();
 	const { width } = useWindowSize();
-
-	const container =
-		window !== undefined ? () => window.document.body : undefined;
+	const [active, setActive] = useState<boolean>(false);
 
 	const location = useLocation();
 
@@ -75,15 +60,13 @@ const SlideInNav = () => {
 		return (
 			<>
 				{/* TODO */}
-				<Slide direction="left" in={!active} mountOnEnter unmountOnExit>
-					<StyledFab onClick={() => setActive(!active)}>
-						<Menu />
-					</StyledFab>
-				</Slide>
+
+				<StyledFab onClick={() => setActive(!active)}>
+					<Menu />
+				</StyledFab>
 
 				{/* The implementation can be swapped with js to avoid SEO duplication of links. */}
 				<Drawer
-					container={container}
 					variant="temporary"
 					anchor="right"
 					open={active}
@@ -97,12 +80,14 @@ const SlideInNav = () => {
 					}}
 				>
 					<Stack height="100%" alignItems="stretch" justifyContent="center">
-						{!active ? (
+						{authenticated ? (
 							<>
 								<StyledNavLink to="/appointments">APPOINTMENTS</StyledNavLink>
 								<StyledNavLink to="/requests">REQUESTS</StyledNavLink>
 								<StyledNavLink to="/account">ACCOUNT</StyledNavLink>
-								<StyledNavLink to="/">SIGN OUT</StyledNavLink>
+								<StyledNavLink to="/" onClick={() => dispatch(signout())}>
+									SIGN OUT
+								</StyledNavLink>
 							</>
 						) : (
 							<>

@@ -2,101 +2,55 @@ import {
 	BottomNavigation,
 	BottomNavigationAction,
 	styled,
-	useTheme,
 } from "@mui/material";
 import {
 	CalendarMonth,
 	Person,
 	MonitorHeart,
 	MoreTime,
-	AddAlert,
 } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import Stetoscope from "../../static/stetoscope";
-import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useNav, Page } from "../../hooks/useNav";
 
 const StickBottomNavigation = styled(BottomNavigation)(({ theme }) => ({
 	backgroundColor: theme.palette.background.paper,
 	borderRadius: "15px 15px 0 0",
+	position: "fixed",
 	bottom: 0,
 	left: 0,
 	width: "100vw",
-	position: "fixed",
 	zIndex: 2,
 }));
-
-enum BottomNavButtons {
-	Appointments = 0,
-	Requests = 1,
-	Calendar = 2,
-	Account = 3,
-}
 
 const StyledBottomNA = styled(BottomNavigationAction)(({ theme }) => ({
 	color: theme.palette.primary.dark,
 }));
 
 const BottomNav = () => {
-	const [value, setValue] = useState<BottomNavButtons>(
-		BottomNavButtons.Appointments
-	);
 	const navigate = useNavigate();
-	const location = useLocation();
-
-	useEffect(() => {
-		switch (location.pathname) {
-			case "/appointments":
-				setValue(BottomNavButtons.Appointments);
-				break;
-			case "/requests":
-				setValue(BottomNavButtons.Requests);
-				break;
-			case "/calendar":
-				setValue(BottomNavButtons.Calendar);
-				break;
-			case "/account":
-				setValue(BottomNavButtons.Account);
-				break;
-		}
-	}, [location]);
+	const page = useNav();
 
 	return (
-		<StickBottomNavigation
-			value={value}
-			onChange={(event, newValue) => {
-				setValue(newValue);
-			}}
-		>
+		<StickBottomNavigation value={page}>
 			{/* TODO: add permissions */}
-			<StyledBottomNA
-				label="Calendar"
-				value={BottomNavButtons.Calendar}
-				onClick={() => navigate("/calendar")}
-				icon={<CalendarMonth />}
-			/>
 
 			<StyledBottomNA
 				label="Appointments"
-				value={BottomNavButtons.Appointments}
+				value={Page.Appointments}
 				onClick={() => navigate("/appointments")}
 				icon={<MonitorHeart />}
 			/>
-			<NavLink to="/appointments">
-				<AddAlert />
-			</NavLink>
 
 			<StyledBottomNA
 				label="Requests"
-				value={BottomNavButtons.Requests}
+				value={Page.Requests}
 				onClick={() => navigate("/requests")}
 				icon={<MoreTime />}
 			/>
 
 			<StyledBottomNA
 				label="Account"
-				value={BottomNavButtons.Account}
+				value={Page.Account}
 				onClick={() => navigate("/account")}
 				icon={<Person />}
 			/>

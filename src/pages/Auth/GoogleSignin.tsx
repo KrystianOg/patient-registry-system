@@ -1,10 +1,18 @@
 import { GoogleLogin } from "react-google-login";
 import config from "../../config.json";
 import { useSigninWithGoogleMutation } from "../../app/services/auth";
-import { useCallback } from "react";
+import { useGetUserQuery } from "../../app/services/users";
 import { useNavigate } from "react-router-dom";
 import { Button, ButtonProps, styled } from "@mui/material";
-import { Google as GoogleIcon } from "@mui/icons-material";
+import { FlashOffRounded, Google as GoogleIcon } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import {
+	selectIdFromToken,
+	setCredentials,
+	setUserInfo,
+} from "../../features/authSlice";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
+import { useEffect } from "react";
 
 const StyledGoogleSignin = styled(Button)(({ theme }) => ({
 	backgroundColor: theme.palette.primary.main,
@@ -16,18 +24,29 @@ const StyledGoogleSignin = styled(Button)(({ theme }) => ({
 }));
 
 const SignIn = (props: ButtonProps) => {
-	const [signinWithGoogle, { isLoading }] = useSigninWithGoogleMutation();
 	const navigate = useNavigate();
-	const onGoogleLoginSuccess = useCallback((response: any) => {
-		signinWithGoogle(response.tokenId)
-			.then(() => {
-				// TODO: change that to variable
-				navigate("/calendar", { replace: true });
-			})
-			.catch((err: any) => {
-				console.log(err);
-			});
-	}, []);
+	const dispatch = useAppDispatch();
+	const [signin, { isLoading }] = useSigninWithGoogleMutation();
+
+	const id = useAppSelector(selectIdFromToken);
+
+	const { data: userData, refetch } = useGetUserQuery(id ?? skipToken);
+	useEffect(() => {
+		if (userData) {
+			dispatch(setUserInfo(userData));
+		}
+	}, [userData]);
+
+	const onGoogleLoginSuccess = async (res: any) => {
+		const { tokenId } = res;
+		try {
+			const token = await signin(tokenId).unwrap();
+			dispatch(setCredentials(token));
+			refetch();
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const onFailure = (res: any) => {
 		console.log("[Login failed] res:", res);
@@ -50,7 +69,7 @@ const SignIn = (props: ButtonProps) => {
 			)}
 			cookiePolicy={"single_host_origin"}
 			style={{ marginTop: "100px" }}
-			isSignedIn={true}
+			isSignedIn={false}
 		/>
 	);
 };

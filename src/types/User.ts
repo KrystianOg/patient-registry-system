@@ -1,20 +1,33 @@
 enum UserType {
-    ADMIN = 1,
-    MODERATOR = 2,
-    DOCTOR = 3,
-    PATIENT = 4
+    ADMIN = 'Admin',
+    MODERATOR = 'Moderator',
+    DOCTOR = 'Doctor',
+    PATIENT = 'Patient'
 }
 
-interface User {
-    id: string;
-    type: UserType; 
+interface BaseUser {
+    id: number;
+    email: string;
     first_name?: string;
     last_name?: string;
-    email: string;
     username: string;
 }
 
+interface AuthUser extends BaseUser {
+    types: UserType[]; 
+    with_google: boolean;
+    vacation_mode: boolean;
+    prefer_dark_mode: boolean;
+    doctor_changes_appointment: boolean;
+    doctor_deletes_appointment: boolean;
+    doctor_accepts_appointment: boolean;
+}
+
 export type {
-    User,
+    BaseUser,
+    AuthUser
+}
+
+export {
     UserType
 }
